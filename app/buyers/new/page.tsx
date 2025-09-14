@@ -10,13 +10,17 @@ import "./NewBuyerPage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBullhorn, faBullseye, faCalendar, faCartPlus, faCity, faClock, faEnvelope, faHome, faIndianRupeeSign, faPhone, faPlaceOfWorship, faRupee, faTag, faTimeline, faTimes, faUser } from "@fortawesome/free-solid-svg-icons";
 import Navbar from "../../navbar"
-
+import Cookies from "js-cookie";
+import { supabase } from "@/lib/validators/supabaseClient";
+import Popup from "../../Popup";
 
 type BuyerFormData = z.infer<typeof createBuyer>;
 
 export default function NewBuyerPage() {
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [popupMessage, setPopupMessage] = useState<string | null>(null);
+  const [popupType, setPopupType] = useState<"success" | "error">("success");
 
   const {
     register,
@@ -30,27 +34,101 @@ export default function NewBuyerPage() {
 
   const propertyType = watch("propertyType");
 
-  const onSubmit = async (data: BuyerFormData) => {
+ const onSubmit = async (data: BuyerFormData) => {
     setLoading(true);
     setServerError(null);
+
     try {
-      const res = await fetch("/api/buyers", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        const err = await res.json();
-        setServerError(JSON.stringify(err.error));
+      const userCookie = Cookies.get("user");
+      if (!userCookie) {
+        setServerError("User not logged in.");
+        setPopupMessage("User not logged in.");
+        setPopupType("error");
+        setLoading(false);
+        return;
+      }
+
+      const decoded = decodeURIComponent(userCookie);
+      const parts = decoded.split(" ");
+      const ownerExternalId = parts[1];
+      if (!ownerExternalId) {
+        setServerError("Invalid cookie format.");
+        setPopupMessage("Invalid cookie format.");
+        setPopupType("error");
+        setLoading(false);
+        return;
+      }
+
+      let { data: buyer, error: buyerError } = await supabase
+        .from("buyers")
+        .select("id, ownerid")
+        .eq("ownerid", ownerExternalId)
+        .single();
+
+      if (buyerError && buyerError.code !== "PGRST116") {
+        setServerError("Error checking buyer.");
+        setPopupMessage("Error checking buyer.");
+        setPopupType("error");
+        setLoading(false);
+        return;
+      }
+
+      if (!buyer) {
+        const { data: newBuyer, error: insertError } = await supabase
+          .from("buyers")
+          .insert([{ ownerid: ownerExternalId }])
+          .select("id, ownerid")
+          .single();
+
+        if (insertError) {
+          setServerError("Could not create buyer.");
+          setPopupMessage("Could not create buyer.");
+          setPopupType("error");
+          setLoading(false);
+          return;
+        }
+        buyer = newBuyer;
+      }
+
+      const { error } = await supabase.from("buyers_data").insert([
+        {
+          owner_id: buyer.id,
+          owner_external_id: ownerExternalId,
+          full_name: data.fullName,
+          email: data.email,
+          phone: data.phone,
+          city: data.city,
+          property_type: data.propertyType,
+          bhk: data.bhk,
+          purpose: data.purpose,
+          timeline: data.timeline,
+          budget_min: data.budgetMin,
+          budget_max: data.budgetMax,
+          source: data.source,
+          tags: data.tags,
+          notes: data.notes,
+          created_at: new Date().toISOString(),
+        },
+      ]);
+
+      if (error) {
+        setServerError(error.message);
+        setPopupMessage(error.message);
+        setPopupType("error");
       } else {
-        alert("Buyer created successfully!");
+        setPopupMessage("✅ Buyer lead created successfully!");
+        setPopupType("success");
       }
     } catch (e) {
+      console.error(e);
       setServerError("Something went wrong.");
+      setPopupMessage("Something went wrong.");
+      setPopupType("error");
     } finally {
       setLoading(false);
     }
   };
+
 
   return (
         <>
@@ -195,12 +273,19 @@ export default function NewBuyerPage() {
     </div>
 
     {serverError && <p className="server-error">{serverError}</p>}
-
-    <button type="submit" disabled={loading} className="submit-btn">
-      {loading ? "Saving..." : "Create Buyer"}
-    </button>
+          <button type="submit" disabled={loading} className="submit-btn">
+            {loading ? "Saving..." : "Create Buyer"}
+          </button>
   </form>
+  
 </div>
+{popupMessage && (
+        <Popup
+          message={popupMessage}
+          type={popupType}
+          onClose={() => setPopupMessage(null)}
+        />
+      )}
 </>
   );
 }

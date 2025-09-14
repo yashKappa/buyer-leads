@@ -1,0 +1,60 @@
+.popup {
+  position: fixed;
+  top: 70px;
+  right: 20px;
+  min-width: 280px;
+  max-width: 420px;
+  padding: 15px 20px;
+  border-radius: 12px;
+  color: #fff;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+  animation: slideFadeIn 0.4s ease forwards;
+  font-family: 'Inter', sans-serif;
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.popup.success {
+    background-color: #081a31;
+}
+
+.popup.error {
+  background: linear-gradient(135deg, #f44336, #e57373);
+}
+
+.popup p {
+  margin: 0;
+  font-size: 16px;
+  flex: 1;
+  padding-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+.popup .close{
+    background-color: #b4b9c0;
+    padding: 5px;
+    border-radius: 10rem;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.popup .close-btn:hover {
+  background: rgba(255, 255, 255, 0.4);
+  transform: scale(1.1);
+}
+
+@keyframes slideFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateX(50px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}

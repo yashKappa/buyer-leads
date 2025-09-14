@@ -1,18 +1,18 @@
 import { NextResponse } from "next/server";
-import { supabase } from "../../../../src/lib/supabaseClient";
+import { supabase } from "@/lib/supabaseClient";
 
 export async function POST(req: Request) {
   try {
     const body = await req.json();
 
-    // get current user from cookie/session
+    // get current user from cookie
     const { data: { user }, error: userError } = await supabase.auth.getUser();
 
     if (userError || !user) {
       return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
     }
 
-    // insert into buyers_data with owner_id = current user id
+    // insert into buyers_data with owner_id
     const { error } = await supabase.from("buyers_data").insert([
       {
         owner_id: user.id,
