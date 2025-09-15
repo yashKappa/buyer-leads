@@ -36,11 +36,12 @@
 }
 
 .popup .close{
-    background-color: #b4b9c0;
-    padding: 5px;
+    background-color: #ffffff;
+    padding: 6px 5px;
     border-radius: 10rem;
     font-size: 10px;
     cursor: pointer;
+    color: #ff0000;
 }
 
 .popup .close-btn:hover {

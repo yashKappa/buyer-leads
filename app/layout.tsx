@@ -1,15 +1,19 @@
-import { ReactNode } from "react";
-import { config } from "@fortawesome/fontawesome-svg-core";
-import "@fortawesome/fontawesome-svg-core/styles.css";
-config.autoAddCss = false;
+"use client";
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+import Navbar from "./navbar";
+import { usePathname } from "next/navigation";
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  const noNavbarRoutes = ["/buyers/new/login","/buyers/new/register"];
+
   return (
     <html lang="en">
-      <head>
-        <title>My App</title>
-      </head>
-      <body>{children}</body>
+      <body>
+        {!noNavbarRoutes.includes(pathname) && <Navbar />}
+        {children}
+      </body>
     </html>
   );
 }

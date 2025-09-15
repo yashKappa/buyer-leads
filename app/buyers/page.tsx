@@ -1,76 +1,165 @@
-import React from "react";
-import Navbar from "../navbar"
+"use client";
 
-interface Buyer {
+import { useEffect, useState } from "react";
+import { supabase } from "@/lib/validators/supabaseClient";
+import Cookies from "js-cookie";
+import "./buyerData.css";
+import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import UserData from "./UserData";
+import { faNoteSticky } from "@fortawesome/free-solid-svg-icons";
+
+interface BuyerData {
   id: number;
-  fullName: string;
-  bhk: string;
+  owner_id: number;
+  owner_external_id: string;
+  full_name: string;
+  email: string;
+  phone: string;
+  city: string;
+  property_type: string;
+  bhk: string | null;
   purpose: string;
-  budgetMin: number;
-  budgetMax: number;
+  timeline: string;
+  budget_min: number;
+  budget_max: number;
   source: string;
   tags: string[];
+  notes: string;
+  created_at: string;
 }
 
-const buyers: Buyer[] = [
-  {
-    id: 1,
-    fullName: "John Doe",
-    bhk: "2 BHK",
-    purpose: "Investment",
-    budgetMin: 2500000,
-    budgetMax: 3500000,
-    source: "Website",
-    tags: ["priority", "hot-lead"],
-  },
-  {
-    id: 2,
-    fullName: "Jane Smith",
-    bhk: "3 BHK",
-    purpose: "Self Use",
-    budgetMin: 4000000,
-    budgetMax: 5000000,
-    source: "Referral",
-    tags: ["cold-lead"],
-  },
-];
+export default function AllBuyersPage() {
+  const [buyers, setBuyers] = useState<BuyerData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<"all" | "user">("all");
+  const [searchTerm, setSearchTerm] = useState("");
 
-export default function List() {
-  return  (
-    <>
-    <Navbar />
-    <div className="list-container">
-      <h1>Buyer Leads</h1>
-      <table className="buyer-table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Full Name</th>
-            <th>BHK</th>
-            <th>Purpose</th>
-            <th>Budget Range (INR)</th>
-            <th>Source</th>
-            <th>Tags</th>
-          </tr>
-        </thead>
-        <tbody>
-          {buyers.map((buyer) => (
-            <tr key={buyer.id}>
-              <td>{buyer.id}</td>
-              <td>{buyer.fullName}</td>
-              <td>{buyer.bhk}</td>
-              <td>{buyer.purpose}</td>
-              <td>
-                {buyer.budgetMin.toLocaleString()} -{" "}
-                {buyer.budgetMax.toLocaleString()}
-              </td>
-              <td>{buyer.source}</td>
-              <td>{buyer.tags.join(", ")}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+  useEffect(() => {
+    const fetchBuyers = async () => {
+      try {
+        const userCookie = Cookies.get("user");
+        if (!userCookie) {
+          setError("User not logged in.");
+          setLoading(false);
+          return;
+        }
+
+        const { data, error } = await supabase
+          .from("buyers_data")
+          .select("*")
+          .order("created_at", { ascending: false });
+
+        if (error) {
+          setError(error.message);
+        } else {
+          setBuyers(data || []);
+        }
+      } catch (e: any) {
+        setError("Something went wrong.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBuyers();
+  }, []);
+
+  // 🔎 Filter buyers by name, city, or property type
+  const filteredBuyers = buyers.filter((b) =>
+    `${b.full_name} ${b.city} ${b.property_type} ${b.purpose}`
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="buyer-data">
+      <div className="all-buyers-page">
+        <div className="tab-buttons">
+          <button
+            onClick={() => setActiveTab("all")}
+            className={activeTab === "all" ? "active" : ""}
+          >
+            All Buyers
+          </button>
+          <button
+            onClick={() => setActiveTab("user")}
+            className={activeTab === "user" ? "active" : ""}
+          >
+            View/Edit
+          </button>
+        </div>
+
+        {activeTab === "all" && (
+          <>
+            <h1>
+              <FontAwesomeIcon icon={faNoteSticky} className="text-gray-600" />{" "}
+              All Buyer Leads
+            </h1>
+
+           <div className="search">
+             <input
+              type="text"
+              placeholder="Search by name, city, property type, or purpose..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="search-input"
+            />
+           </div>
+
+            {loading ? (
+              <p>Loading buyers...</p>
+            ) : error ? (
+              <p className="error">{error}</p>
+            ) : filteredBuyers.length === 0 ? (
+              <p className="no-data">
+                <Image
+                  src="/images/customer.png"
+                  alt="customer Image"
+                  width={100}
+                  height={80}
+                  className="image"
+                />
+                No buyer leads found.
+              </p>
+            ) : (
+              <table className="buyers-table">
+                <thead>
+                  <tr>
+                    <th>Full Name</th>
+                    <th>Property Type</th>
+                    <th>BHK</th>
+                    <th>City</th>
+                    <th>Budget</th>
+                    <th>Purpose</th>
+                    <th>Timeline</th>
+                    <th>Created At</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredBuyers.map((b) => (
+                    <tr key={b.id}>
+                      <td>{b.full_name}</td>
+                      <td>{b.property_type}</td>
+                      <td>{b.bhk}</td>
+                      <td>{b.city}</td>
+                      <td>
+                        ₹{b.budget_min} – ₹{b.budget_max}
+                      </td>
+                      <td>{b.purpose}</td>
+                      <td>{b.timeline}</td>
+                      <td>{new Date(b.created_at).toLocaleDateString()}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </>
+        )}
+
+        {activeTab === "user" && <UserData />}
+      </div>
     </div>
-        </>
   );
 }

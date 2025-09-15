@@ -1,0 +1,180 @@
+/* Page wrapper */
+.all-buyers-page {
+  font-family: "Inter", "Segoe UI", Arial, sans-serif;
+  color: #333;
+  min-height: 100vh;
+}
+
+.buyer-data{
+  padding: 10px;
+}
+
+/* Page Title */
+.all-buyers-page h1 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1e293b;
+}
+
+/* Table styling */
+.all-buyers-page table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Table header */
+.all-buyers-page thead {
+  background-color: #21364b;
+}
+
+.all-buyers-page th {
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  border-bottom: 2px solid #e2e8f0;
+  color: white;
+}
+
+/* Table body */
+.all-buyers-page td {
+  padding: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* Alternate row color */
+.all-buyers-page tbody tr:nth-child(even) {
+  background-color: #f9fafb;
+}
+
+/* Hover effect */
+.all-buyers-page tbody tr:hover {
+  background-color: #eef2f7;
+  transition: 0.2s ease-in-out;
+}
+
+/* Error message */
+.error-message {
+  color: #dc2626;
+  font-weight: 500;
+}
+
+/* Loading message */
+.loading-message {
+  color: #475569;
+  font-style: italic;
+}
+
+.tab-buttons{
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+.tab-buttons button{
+  padding: 8px 15px;
+  color: rgb(0, 0, 0);
+  border-radius: 0.2rem;
+  border: none;
+  cursor: pointer;
+}
+
+.tab-buttons .active{
+  background-color: rgb(4, 31, 46);
+  color: white;
+  }
+
+  .no-data{
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+  }
+
+  .buyer-card {
+  border: 1px solid #ddd;
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.buyer-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 items in a row */
+  gap: 15px;
+  margin-bottom: 12px;
+}
+
+.buyer-grid p,
+.buyer-grid input {
+  margin: 0;
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.budget-edit {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 1rem;
+  justify-content: end;
+}
+
+.actions button {
+  margin-right: 8px;
+  padding: 6px 12px;
+  border: none;
+  background: #0070f3;
+  color: white;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.actions button:last-child {
+  background: #e63946;
+}
+
+.status, .select{
+  padding: 8px;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.search-input{
+  padding: 10px 15px;
+  width: 50%;
+  justify-content: center;
+  display: flex;
+  border-radius: 0.3rem;
+  border: 1px solid #ccc;
+}
+
+.search-input:focus{
+  outline: none;
+    border: 1px solid #5f5f5f;
+}
+
+.search{
+  justify-content: center;
+  display: flex;
+  padding: 0px 0px 30px 0px;
+}

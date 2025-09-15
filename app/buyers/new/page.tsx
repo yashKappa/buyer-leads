@@ -9,10 +9,10 @@ import { redirect } from "next/navigation";
 import "./NewBuyerPage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBullhorn, faBullseye, faCalendar, faCartPlus, faCity, faClock, faEnvelope, faHome, faIndianRupeeSign, faPhone, faPlaceOfWorship, faRupee, faTag, faTimeline, faTimes, faUser } from "@fortawesome/free-solid-svg-icons";
-import Navbar from "../../navbar"
 import Cookies from "js-cookie";
 import { supabase } from "@/lib/validators/supabaseClient";
 import Popup from "../../Popup";
+
 
 type BuyerFormData = z.infer<typeof createBuyer>;
 
@@ -26,6 +26,7 @@ export default function NewBuyerPage() {
     register,
     handleSubmit,
     watch,
+    reset, // ✅ add reset here
     formState: { errors },
   } = useForm<BuyerFormData>({
     resolver: zodResolver(createBuyer),
@@ -91,33 +92,38 @@ export default function NewBuyerPage() {
       }
 
       const { error } = await supabase.from("buyers_data").insert([
-        {
-          owner_id: buyer.id,
-          owner_external_id: ownerExternalId,
-          full_name: data.fullName,
-          email: data.email,
-          phone: data.phone,
-          city: data.city,
-          property_type: data.propertyType,
-          bhk: data.bhk,
-          purpose: data.purpose,
-          timeline: data.timeline,
-          budget_min: data.budgetMin,
-          budget_max: data.budgetMax,
-          source: data.source,
-          tags: data.tags,
-          notes: data.notes,
-          created_at: new Date().toISOString(),
-        },
-      ]);
+  {
+    owner_id: buyer.id,
+    owner_external_id: ownerExternalId,
+    full_name: data.fullName,
+    email: data.email,
+    phone: data.phone,
+    city: data.city,
+    property_type: data.propertyType,
+    bhk: data.bhk,
+    purpose: data.purpose,
+    timeline: data.timeline,
+    status: data.status,
+    budget_min: data.budgetMin,
+    budget_max: data.budgetMax,
+    source: data.source,
+    tags: data.tags,
+    notes: data.notes,
+    created_at: new Date().toISOString(),
+  },
+]);
+
 
       if (error) {
         setServerError(error.message);
         setPopupMessage(error.message);
         setPopupType("error");
       } else {
-        setPopupMessage("✅ Buyer lead created successfully!");
+        setPopupMessage("✔ Buyer lead created successfully!");
         setPopupType("success");
+         reset();
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
       }
     } catch (e) {
       console.error(e);
@@ -132,7 +138,6 @@ export default function NewBuyerPage() {
 
   return (
         <>
-    <Navbar />
 <div className="buyer-form-container">
   <h1 className="form-title"><FontAwesomeIcon icon={faCartPlus} className="text-gray-600" />Create Buyer Lead</h1>
 
@@ -241,6 +246,8 @@ export default function NewBuyerPage() {
       </div>
     </div>
 
+    
+
     {/* Source & Tags */}
     <div className="form-row">
       <div className="form-group">
@@ -264,6 +271,21 @@ export default function NewBuyerPage() {
         />
       </div>
     </div>
+<div className="form-row">
+  <div className="form-group">
+    <label><FontAwesomeIcon icon={faClock} className="text-gray-600" /> Status</label>
+    <select {...register("status")}>
+      <option value="New">New</option>
+      <option value="Qualified">Qualified</option>
+      <option value="Contacted">Contacted</option>
+      <option value="Visited">Visited</option>
+      <option value="Negotiation">Negotiation</option>
+      <option value="Converted">Converted</option>
+      <option value="Dropped">Dropped</option>
+    </select>
+    {errors.status && <p className="error">{errors.status.message}</p>}
+  </div>
+</div>
 
     {/* Notes */}
     <div className="form-group">
