@@ -2,7 +2,7 @@
 <img width="1366" height="649" alt="ALl Buyers" src="https://github.com/user-attachments/assets/f87742f9-fdc9-4e77-8716-f611c9facff0" />
 <img width="1366" height="646" alt="buyer data" src="https://github.com/user-attachments/assets/0e7d7653-db38-47f9-9f75-a757db9b40ee" />
 <img width="1151" height="998" alt="Add Buyers" src="https://github.com/user-attachments/assets/d9fb59f5-3fd8-4976-b71a-48b929a6254c" />
-<img width="1151" height="998" alt="Add Buyers" src="https://github.com/user-attachments/assets/ada5a35b-6dfa-4251-86b3-2b77de06172e" />
+<img width="1366" height="648" alt="login-register" src="https://github.com/user-attachments/assets/b720b04c-6e02-4f5a-8479-081d9133dfd8" />
 
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
