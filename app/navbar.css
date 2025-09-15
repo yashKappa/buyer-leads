@@ -2,8 +2,8 @@
     margin: 0%;
     padding: 0%;
     box-sizing: border-box;
-      overflow-y: scroll;   /* ensure scrolling works */
-  scrollbar-width: none; /* Firefox */
+      overflow-y: scroll;   
+  scrollbar-width: none; 
   font-family: 'Segoe UI';
 }
 
@@ -14,7 +14,6 @@
     margin-bottom: 5rem;
 }
 
-/* Navbar */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -23,12 +22,10 @@
     color: white;
     padding: 15px 20px;
     position: fixed;
-    /* 🔥 stays fixed */
     top: 0;
     left: 0;
     width: 100%;
     z-index: 1002;
-    /* above menu & content */
 }
 
 .logo {
@@ -37,7 +34,6 @@
     font-weight: bold;
 }
 
-/* Nav links (desktop) */
 .nav-links {
     display: flex;
     gap: 15px;
@@ -60,7 +56,6 @@
     border-radius: 6px;
 }
 
-/* Hamburger button (hidden on desktop) */
 .hamburger {
     display: none;
     flex-direction: column;
@@ -80,7 +75,6 @@
     transition: 0.3s;
 }
 
-/* Rotate hamburger when open */
 .hamburger.open span:nth-child(1) {
     transform: rotate(45deg) translate(5px, 6px);
 }
@@ -93,7 +87,6 @@
     transform: rotate(-45deg) translate(5px, -6px);
 }
 
-/* Mobile styles */
 @media (max-width: 768px) {
     .hamburger {
         display: flex;
@@ -128,11 +121,9 @@
     }
 }
 
-/* Main content */
 .main-content {
     flex: 1;
     padding: 100px 20px 20px;
-    /* 🔥 top padding to avoid overlap with fixed navbar */
 }
 
 .about-page {

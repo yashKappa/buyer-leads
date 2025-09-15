@@ -4,9 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "next build --turbopack && next export",
+    "build": "next build --turbopack",
     "start": "next start",
-    "deploy": "gh-pages -d out",
     "lint": "eslint"
   },
   "dependencies": {

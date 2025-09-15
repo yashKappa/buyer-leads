@@ -79,7 +79,7 @@ export default function LoginPage() {
         .insert([
           {
             name: formData.name,
-            password: formData.password, // ⚠️ hash in production
+            password: formData.password, 
             timeline: "Exploring",
             ownerid: newUserId,
             updatedat: new Date().toISOString(),
@@ -93,11 +93,10 @@ export default function LoginPage() {
       } else {
         console.log("Inserted:", data);
 
-        // ✅ Set cookies
 Cookies.set("user", `${formData.name} ${newUserId}`, { expires: 7 });
 
 
-        router.push("/"); // redirect after success
+        router.push("/"); 
       }
     }
   };
@@ -136,7 +135,6 @@ Cookies.set("user", `${formData.name} ${newUserId}`, { expires: 7 });
           </div>
           <h2 className="login-title">Register</h2>
 
-          {/* Name */}
           <div className="form-group">
             <label>
               <FontAwesomeIcon icon={faUser} className="text-gray-600" /> Name
@@ -151,7 +149,6 @@ Cookies.set("user", `${formData.name} ${newUserId}`, { expires: 7 });
             {errors.name && <p className="error">{errors.name}</p>}
           </div>
 
-          {/* Password */}
           <div className="form-group password-group">
             <label>
               <FontAwesomeIcon icon={faLock} className="text-gray-600" /> Password
@@ -175,7 +172,6 @@ Cookies.set("user", `${formData.name} ${newUserId}`, { expires: 7 });
             {errors.password && <p className="error">{errors.password}</p>}
           </div>
 
-          {/* Confirm Password */}
           <div className="form-group password-group">
             <label>
               <FontAwesomeIcon icon={faLock} className="text-gray-600" /> Confirm Password

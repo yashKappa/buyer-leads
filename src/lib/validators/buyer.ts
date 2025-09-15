@@ -14,6 +14,9 @@ export const createBuyer = z.object({
   source: z.enum(["Website", "Referral", "Walk-in", "Call", "Other"]),
   notes: z.string().max(1000).optional(),
   tags: z.array(z.string()).optional(),
+
+  status: z.enum(["New", "Qualified", "Contacted", "Visited", "Negotiation", "Converted", "Dropped"]).default("New"),
 });
 
 export type CreateBuyerInput = z.infer<typeof createBuyer>;
+

@@ -8,7 +8,7 @@ import { faClose, faCross, faX } from "@fortawesome/free-solid-svg-icons";
 interface PopupProps {
   message: string;
   type?: "success" | "error";
-  duration?: number; // milliseconds
+  duration?: number; 
   onClose: () => void;
 }
 

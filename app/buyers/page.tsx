@@ -66,7 +66,6 @@ export default function AllBuyersPage() {
     fetchBuyers();
   }, []);
 
-  // 🔎 Filter buyers by name, city, or property type
   const filteredBuyers = buyers.filter((b) =>
     `${b.full_name} ${b.city} ${b.property_type} ${b.purpose}`
       .toLowerCase()

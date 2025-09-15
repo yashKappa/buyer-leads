@@ -40,20 +40,18 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      // Check if user exists in buyers table
       const { data, error } = await supabase
         .from("buyers")
         .select("*")
         .eq("name", formData.name)
-        .eq("password", formData.password) // ⚠️ hash password in production
+        .eq("password", formData.password)
         .single();
 
       if (error || !data) {
         alert("Invalid name or password");
       } else {
-        // Set cookie as "name userId"
         Cookies.set("user", `${data.name} ${data.ownerid}`, { expires: 7 });
-        router.push("/home"); // redirect after login
+        router.push("/home");
       }
     } catch (err) {
       console.error(err);
@@ -64,39 +62,39 @@ export default function LoginPage() {
   };
 
   return (
-      <div className="login-container">
-           <button className="back-btn" onClick={() => router.push("/")}>
-             <FontAwesomeIcon icon={faArrowLeft} /> Back
-           </button>
-     
-           <div className="login-image">
-             <Image
-               src="/images/house.png"
-               alt="Login Image"
-               width={400}
-               height={300}
-               className="rounded floating"
-             />
-             <p className="slogan">
-               Find your dream home with ease! <br />
-               Join our community today.
-             </p>
-             <p className="slogan">Create your account to start exploring buyer leads.</p>
-           </div>
-     
-       <div className="login">
-         <form onSubmit={handleSubmit} className="login-form">
-             <div className="logo">
-                      <Image
-                        src="/images/logo.png"
-                        alt="Login Image"
-                        width={100}
-                        height={70}
-                        className="logo"
-                      />
-                    </div>
-                    <h2 className="login-title">Login</h2>
-          
+    <div className="login-container">
+      <button className="back-btn" onClick={() => router.push("/")}>
+        <FontAwesomeIcon icon={faArrowLeft} /> Back
+      </button>
+
+      <div className="login-image">
+        <Image
+          src="/images/house.png"
+          alt="Login Image"
+          width={400}
+          height={300}
+          className="rounded floating"
+        />
+        <p className="slogan">
+          Find your dream home with ease! <br />
+          Join our community today.
+        </p>
+        <p className="slogan">Create your account to start exploring buyer leads.</p>
+      </div>
+
+      <div className="login">
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="logo">
+            <Image
+              src="/images/logo.png"
+              alt="Login Image"
+              width={100}
+              height={70}
+              className="logo"
+            />
+          </div>
+          <h2 className="login-title">Login</h2>
+
           <div className="form-group">
             <label>
               <FontAwesomeIcon icon={faUser} className="text-gray-600" /> Name
@@ -128,11 +126,11 @@ export default function LoginPage() {
           <button type="submit" disabled={loading} className="login-btn">
             {loading ? "Logging in..." : "Login"}
           </button>
- <p className="account">
-    Don`t have an account? <Link href="/buyers/new/register">Register</Link>
-  </p>       
-   </form>
-       </div>
+          <p className="account">
+            Don`t have an account? <Link href="/buyers/new/register">Register</Link>
+          </p>
+        </form>
       </div>
+    </div>
   );
 }

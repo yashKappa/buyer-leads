@@ -3,12 +3,12 @@
 import { useState, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
-import { supabase } from "@/lib/validators/supabaseClient"; // your supabase client
+import { supabase } from "@/lib/validators/supabaseClient";
 import "./navbar.css";
 
 export default function Home() {
   const router = useRouter();
-  const pathname = usePathname(); 
+  const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeUrl, setActiveUrl] = useState("/");
   const [user, setUser] = useState<{ name: string; userId: string } | null>(null);
@@ -18,9 +18,8 @@ export default function Home() {
     setActiveUrl(pathname);
   }, [pathname]);
 
-  // Check cookie and database
   useEffect(() => {
-    const cookie = Cookies.get("user"); // "Amol dsfshisdf@si"
+    const cookie = Cookies.get("user");
     if (!cookie) {
       setUser(null);
       setLoading(false);
@@ -34,7 +33,6 @@ export default function Home() {
       return;
     }
 
-    // Check if user exists in database
     const checkUser = async () => {
       const { data, error } = await supabase
         .from("buyers")
@@ -46,7 +44,7 @@ export default function Home() {
       if (data) {
         setUser({ name, userId });
       } else {
-        setUser(null); // cookie invalid
+        setUser(null);
         Cookies.remove("user");
       }
       setLoading(false);
