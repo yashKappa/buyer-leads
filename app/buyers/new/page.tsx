@@ -265,7 +265,7 @@ export default function NewBuyerPage() {
               <label><FontAwesomeIcon icon={faTag} className="text-gray-600" />Tags (comma separated)</label>
               <input
                 {...register("tags", {
-                  setValueAs: (v) => (v ? v.split(",").map((t) => t.trim()) : []),
+                  setValueAs: (v: string) => (v ? v.split(",").map((t: string) => t.trim()) : []),
                 })}
               />
             </div>
