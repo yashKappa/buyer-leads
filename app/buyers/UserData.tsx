@@ -130,7 +130,15 @@ export default function UserBuyersPage() {
     };
 
     if (loading) return <p className="loading">Loading your data...</p>;
-    if (error) return <p className="error">{error}</p>;
+    if (error) return <p className="no-data">
+                     <Image
+                      src="/images/login.png"
+                      alt="customer Image"
+                      width={200}
+                      height={200}
+                      className="image"
+                    />
+                    {error}</p>;
 
     return (
         <div className="user-buyers-page">

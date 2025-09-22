@@ -110,7 +110,15 @@ export default function AllBuyersPage() {
             {loading ? (
               <p>Loading buyers...</p>
             ) : error ? (
-              <p className="error">{error}</p>
+              <p className="no-data">
+                 <Image
+                  src="/images/login.png"
+                  alt="customer Image"
+                  width={200}
+                  height={200}
+                  className="image"
+                />
+                {error}</p>
             ) : filteredBuyers.length === 0 ? (
               <p className="no-data">
                 <Image
