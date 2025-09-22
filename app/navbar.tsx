@@ -34,7 +34,7 @@ export default function Home() {
     }
 
     const checkUser = async () => {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from("buyers")
         .select("*")
         .eq("name", name)

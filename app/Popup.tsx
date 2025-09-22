@@ -3,7 +3,7 @@
 import React, { useEffect } from "react";
 import "./Popup.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose, faCross, faX } from "@fortawesome/free-solid-svg-icons";
+import { faClose} from "@fortawesome/free-solid-svg-icons";
 
 interface PopupProps {
   message: string;

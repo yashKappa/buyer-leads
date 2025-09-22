@@ -56,7 +56,7 @@ export default function AllBuyersPage() {
         } else {
           setBuyers(data || []);
         }
-      } catch (e: any) {
+      } catch{
         setError("Something went wrong.");
       } finally {
         setLoading(false);

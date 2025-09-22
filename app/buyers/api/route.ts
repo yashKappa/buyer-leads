@@ -36,7 +36,7 @@ export async function POST(req: Request) {
         }
 
         return NextResponse.json({ message: "Buyer created successfully!" }, { status: 200 });
-    } catch (e) {
+    } catch {
         return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
     }
 }
