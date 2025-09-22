@@ -1,14 +1,12 @@
 "use client";
 
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { createBuyer } from "@/lib/validators/buyer";
 import { z } from "zod";
 import { useState } from "react";
-import { redirect } from "next/navigation";
 import "./NewBuyerPage.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBullhorn, faBullseye, faCalendar, faCartPlus, faCity, faClock, faEnvelope, faHome, faIndianRupeeSign, faPhone, faPlaceOfWorship, faRupee, faTag, faTimeline, faTimes, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBullhorn, faBullseye, faCalendar, faCartPlus, faCity, faClock, faEnvelope, faHome, faIndianRupeeSign, faPhone, faTag, faUser } from "@fortawesome/free-solid-svg-icons";
 import Cookies from "js-cookie";
 import { supabase } from "@/lib/validators/supabaseClient";
 import Popup from "../../Popup";
@@ -59,36 +57,30 @@ export default function NewBuyerPage() {
         return;
       }
 
-      let { data: buyer, error: buyerError } = await supabase
-        .from("buyers")
-        .select("id, ownerid")
-        .eq("ownerid", ownerExternalId)
-        .single();
+let { data: buyer } = await supabase
+  .from("buyers")
+  .select("id, ownerid")
+  .eq("ownerid", ownerExternalId)
+  .single();
 
-      if (buyerError && buyerError.code !== "PGRST116") {
-        setServerError("Error checking buyer.");
-        setPopupMessage("Error checking buyer.");
-        setPopupType("error");
-        setLoading(false);
-        return;
-      }
+if (!buyer) {
+  const { data: newBuyer, error: insertError } = await supabase
+    .from("buyers")
+    .insert([{ ownerid: ownerExternalId }])
+    .select("id, ownerid")
+    .single();
 
-      if (!buyer) {
-        const { data: newBuyer, error: insertError } = await supabase
-          .from("buyers")
-          .insert([{ ownerid: ownerExternalId }])
-          .select("id, ownerid")
-          .single();
+  if (insertError) {
+    setServerError("Could not create buyer.");
+    setPopupMessage("Could not create buyer.");
+    setPopupType("error");
+    setLoading(false);
+    return;
+  }
 
-        if (insertError) {
-          setServerError("Could not create buyer.");
-          setPopupMessage("Could not create buyer.");
-          setPopupType("error");
-          setLoading(false);
-          return;
-        }
-        buyer = newBuyer;
-      }
+  buyer = newBuyer; // ✅ Now allowed because buyer is `let`
+}
+
 
       const { error } = await supabase.from("buyers_data").insert([
         {
