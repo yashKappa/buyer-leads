@@ -2,6 +2,7 @@
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import Navbar from "./navbar";
 import { usePathname } from "next/navigation";
+import { Analytics } from "@vercel/analytics/next"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -13,14 +14,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <title>My App</title>
       </head>
       <body>
-        {/* Conditionally render Navbar */}
         {!noNavbarRoutes.includes(pathname) && <Navbar />}
 
-        {/* Main content */}
         {children}
 
-        {/* Collect performance metrics */}
         <SpeedInsights />
+        <Analytics />
       </body>
     </html>
   );
