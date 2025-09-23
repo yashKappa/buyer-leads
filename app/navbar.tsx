@@ -5,6 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { supabase } from "@/lib/validators/supabaseClient";
 import "./navbar.css";
+import Image from "next/image";
 
 export default function Home() {
   const router = useRouter();
@@ -69,7 +70,16 @@ export default function Home() {
   return (
     <div className="container">
       <nav className="navbar">
-        <h2 className="logo">Buyer Leads</h2>
+        <h2 className="logo">
+          <div>
+            <Image
+              src="/images/logos.png"
+              alt="customer Image"
+              width={50}
+              height={35}
+              className="image"
+            />
+          </div>Buyer Leads</h2>
 
         <button
           className={`hamburger ${menuOpen ? "open" : ""}`}
